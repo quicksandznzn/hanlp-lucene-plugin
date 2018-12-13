@@ -44,7 +44,7 @@ HanLP中文分词Lucene插件
 | --------   | -----:  | :----:  |
 | algorithm   | [分词算法](https://github.com/hankcs/HanLP/blob/master/src/main/java/com/hankcs/hanlp/HanLP.java#L643) |   viterbi     |
 | enableIndexMode    | 设为索引模式（切勿在query中开启）该字段在此fork项目中未起到作用 |   true     |
-| enableIndexModeNum  | 分词切分最小颗粒度（query时为0 index时可选 1 2） | 2 |
+| enableIndexModeNum  | 分词切分颗粒度（query时为0 index时可选 1最小颗粒度 2标准分词） | 2 |
 | enableCustomDictionary    | 是否启用用户词典 |   true     |
 | customDictionaryPath    | 用户词典路径(绝对路径或程序可以读取的相对路径,多个词典用空格隔开) |   null     |
 | enableCustomDictionaryForcing    | [用户词典高优先级](https://github.com/hankcs/HanLP/wiki/FAQ#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BF%AE%E6%94%B9%E4%BA%86%E8%AF%8D%E5%85%B8%E8%BF%98%E6%98%AF%E6%B2%A1%E6%9C%89%E6%95%88%E6%9E%9C) |   false     |
