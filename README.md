@@ -43,7 +43,7 @@ HanLP中文分词Lucene插件
 | 配置项名称       | 功能   |  默认值  |
 | --------   | -----:  | :----:  |
 | algorithm   | [分词算法](https://github.com/hankcs/HanLP/blob/master/src/main/java/com/hankcs/hanlp/HanLP.java#L643) |   viterbi     |
-| enableIndexMode    | 设为索引模式（切勿在query中开启） |   true     |
+| enableIndexMode    | 设为索引模式（切勿在query中开启）该字段在此fork项目中未起到作用 |   true     |
 | enableIndexModeNum  | 分词切分最小颗粒度（query时为0 index时可选 1 2） | 2 |
 | enableCustomDictionary    | 是否启用用户词典 |   true     |
 | customDictionaryPath    | 用户词典路径(绝对路径或程序可以读取的相对路径,多个词典用空格隔开) |   null     |
