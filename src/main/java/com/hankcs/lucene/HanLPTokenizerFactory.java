@@ -15,9 +15,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class HanLPTokenizerFactory extends TokenizerFactory
-{
+public class HanLPTokenizerFactory extends TokenizerFactory {
     private boolean enableIndexMode;
+    private int enableIndexModeNum;
     private boolean enablePorterStemming;
     private boolean enableNumberQuantifierRecognize;
     private boolean enableCustomDictionary;
@@ -36,10 +36,10 @@ public class HanLPTokenizerFactory extends TokenizerFactory
      *
      * @param args 通过这个Map保存xml中的配置项
      */
-    public HanLPTokenizerFactory(Map<String, String> args)
-    {
+    public HanLPTokenizerFactory(Map<String, String> args) {
         super(args);
         enableIndexMode = getBoolean(args, "enableIndexMode", true);
+        enableIndexModeNum = getInt(args, "enableIndexModeNum", 1);
         enablePorterStemming = getBoolean(args, "enablePorterStemming", false);
         enableNumberQuantifierRecognize = getBoolean(args, "enableNumberQuantifierRecognize", false);
         enableCustomDictionary = getBoolean(args, "enableCustomDictionary", true);
@@ -53,32 +53,33 @@ public class HanLPTokenizerFactory extends TokenizerFactory
         HanLP.Config.Normalization = getBoolean(args, "enableNormalization", HanLP.Config.Normalization);
         algorithm = getString(args, "algorithm", "viterbi");
         Set<String> customDictionaryPathSet = getSet(args, "customDictionaryPath");
-        if (customDictionaryPathSet != null)
-        {
+        if (customDictionaryPathSet != null) {
             HanLP.Config.CustomDictionaryPath = customDictionaryPathSet.toArray(new String[0]);
         }
         String stopWordDictionaryPath = get(args, "stopWordDictionaryPath");
-        if (stopWordDictionaryPath != null)
-        {
+        if (stopWordDictionaryPath != null) {
             stopWordDictionary = new TreeSet<>();
             stopWordDictionary.addAll(IOUtil.readLineListWithLessMemory(stopWordDictionaryPath));
         }
-        if (getBoolean(args, "enableDebug", false))
-        {
+        if (getBoolean(args, "enableDebug", false)) {
             HanLP.Config.enableDebug();
         }
     }
 
-    protected final String getString(Map<String, String> args, String name, String defaultVal)
-    {
+    protected final String getString(Map<String, String> args, String name, String defaultVal) {
         String s = args.remove(name);
         return s == null ? defaultVal : s;
     }
 
     @Override
-    public Tokenizer create(AttributeFactory factory)
-    {
-        Segment segment = HanLP.newSegment(algorithm).enableOffset(true).enableIndexMode(enableIndexMode)
+    public Tokenizer create(AttributeFactory factory) {
+
+        // 大于2则设置为标准分词
+        if (enableIndexModeNum > 2) {
+            enableIndexModeNum = 2;
+        }
+        // 修改可以传int值 1为最细颗粒度分词 2标准分词
+        Segment segment = HanLP.newSegment(algorithm).enableOffset(true).enableIndexMode(enableIndexModeNum)
                 .enableNameRecognize(enableNameRecognize)
                 .enableNumberQuantifierRecognize(enableNumberQuantifierRecognize)
                 .enableCustomDictionary(enableCustomDictionary)
@@ -87,16 +88,13 @@ public class HanLPTokenizerFactory extends TokenizerFactory
                 .enableJapaneseNameRecognize(enableJapaneseNameRecognize)
                 .enableOrganizationRecognize(enableOrganizationRecognize)
                 .enablePlaceRecognize(enablePlaceRecognize);
-        if (enableTraditionalChineseMode)
-        {
+        if (enableTraditionalChineseMode) {
             segment.enableIndexMode(false);
             Segment inner = segment;
             TraditionalChineseTokenizer.SEGMENT = inner;
-            segment = new Segment()
-            {
+            segment = new Segment() {
                 @Override
-                protected List<Term> segSentence(char[] sentence)
-                {
+                protected List<Term> segSentence(char[] sentence) {
                     List<Term> termList = TraditionalChineseTokenizer.segment(new String(sentence));
                     return termList;
                 }
