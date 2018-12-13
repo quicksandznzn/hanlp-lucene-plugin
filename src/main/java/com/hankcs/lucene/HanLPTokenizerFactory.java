@@ -39,7 +39,7 @@ public class HanLPTokenizerFactory extends TokenizerFactory {
     public HanLPTokenizerFactory(Map<String, String> args) {
         super(args);
         enableIndexMode = getBoolean(args, "enableIndexMode", true);
-        enableIndexModeNum = getInt(args, "enableIndexModeNum", 1);
+        enableIndexModeNum = getInt(args, "enableIndexModeNum", 2);
         enablePorterStemming = getBoolean(args, "enablePorterStemming", false);
         enableNumberQuantifierRecognize = getBoolean(args, "enableNumberQuantifierRecognize", false);
         enableCustomDictionary = getBoolean(args, "enableCustomDictionary", true);
